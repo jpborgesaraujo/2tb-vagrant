@@ -18,6 +18,21 @@ O FTP permite a transferência de arquivos, ele e um método que permite baixar 
 O primeiro passo e criar uma vm básica depois faz o provisionamento da imagem do DHCP, após isso e feito a definição de porta da imagem, e utilizado um comando para iniciar a imagem é depois disso ela se torna um contêiner, depois disso e inserido um arquivo dentro dele, esse arquivo contém as configurações do contêiner.
 
 Esse passo se repete para o: DNS, SERVIDOR WEB APACHE, FTP e NFS.
+passo a passo para utilizar o meu vagrantfile:
+Clone o repositório “2tb-vagrant” em sua máquina.
+   
+bash
+  git clone <(https://github.com/jpborgesaraujo/2tb-vagrant.git)>
+  cd <2tb-vagrant>
+ 
+2. Inicie as máquinas virtuais usando o Vagrant.
+ vagrant up
+
+3. Após a criação das VMs, utilize o seguinte comando para se conectar a VM desejada.
+   
+  vagrant ssh VM1
+  vagrant ssh VM2
+  vagrant ssh VM3
 
 Exemplo de código que importa a imagem:
 
