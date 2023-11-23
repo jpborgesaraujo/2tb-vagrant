@@ -1,4 +1,5 @@
 Esse trabalho vai utilizar a topologia de rede estrela pelo fato que todos os containers vão se comunicar com a vm de forma separada.
+
 O DHCP (Dynamic Host Configuration Protocol), que nada mais é do que um provedor que faz com que as máquinas dentro de determinada rede consigam obter um endereço de IP de maneira automática, ele vai ser implantado dentro da vm como imagem para depois de rodar ser chamado de contêiner.
 
 O DNS converte a solicitação de um site que está em palavras para o IP do site solicitado.
