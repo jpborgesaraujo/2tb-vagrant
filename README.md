@@ -22,7 +22,7 @@ passo a passo para utilizar o meu vagrantfile:
 Clone o repositório “2tb-vagrant” em sua máquina.
    
 bash
-  git clone <(https://github.com/jpborgesaraujo/2tb-vagrant.git)>
+  git clone < https://github.com/jpborgesaraujo/2tb-vagrant.git >
   cd <2tb-vagrant>
  
 2. Inicie as máquinas virtuais usando o Vagrant.
