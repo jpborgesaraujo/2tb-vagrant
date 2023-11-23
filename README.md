@@ -1,5 +1,10 @@
 Esse trabalho vai utilizar a topologia de rede estrela pelo fato que todos os containers vão se comunicar com a vm de forma separada.
 
+Divisão de rede: 
+rede do servidor:192.168.14.0/24.
+Sub-rede da maquina virtual:192.168.15.0/24.
+Sub-rede para os Contêineres do Docker: entre 192.168.16.0/24 é 192.168.25.0/24.
+
 O DHCP (Dynamic Host Configuration Protocol), que nada mais é do que um provedor que faz com que as máquinas dentro de determinada rede consigam obter um endereço de IP de maneira automática, ele vai ser implantado dentro da vm como imagem para depois de rodar ser chamado de contêiner.
 
 O DNS converte a solicitação de um site que está em palavras para o IP do site solicitado.
