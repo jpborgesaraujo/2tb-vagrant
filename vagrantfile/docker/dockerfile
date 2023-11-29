@@ -1,0 +1,6 @@
+FROM gusztavvargadr/ubuntu-server:latest
+RUN mkdir -p /teste
+RUN echo "/shared *(rw,fsid=0,sync,no_subtree_check,no_auth_nlm,insecure,no_root_squash)" > /etc/exports
+EXPOSE 2049
+EXPOSE 111/udp
+EXPOSE 111

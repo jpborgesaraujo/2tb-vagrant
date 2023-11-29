@@ -1,0 +1,52 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "gusztavvargadr/ubuntu-server"
+
+    config.vm.define "server1" do |server1|
+      
+      server1.vm.network "private_network", ip: "192.168.56.1", gateway: "192.168.56.3"
+      config.vm.synced_folder ".", "/var/www/html"
+      config.vm.provision "shell", inline: <<-SHELL
+         apt-get update
+      SHELL
+      
+      
+    end
+    config.vm.provider "docker" do |d|
+      d.image = "phoenixmedia/external-nfs-servidor-provisionador"
+    end
+    servidor-nfs.vm.synced_folder "/host/dir1", "/guest/dir1"
+    
+
+
+
+    config.vm.provider "docker" do |d|
+        d.image = "Fauria/vsftpd"
+    end
+    servidor-ftp.vm.synced_folder "/host/dir1", "/guest/dir1"
+    
+
+
+
+    config.vm.provider "docker" do |d|
+        d.image = "httpd (pd)"
+    end
+    servidor-apache.vm.synced_folder "/host/dir1", "/guest/dir1"
+    
+
+
+    
+    config.vm.provider "docker" do |d|
+        d.image = "technitium/dns-server"
+    end
+    servidor-dns.vm.synced_folder "/host/dir1", "/guest/dir1"
+    
+
+    
+    config.vm.provider "docker" do |d|
+        d.image = "networkboot/dhcpd (tabu)"
+    end
+    servidor-dhcp.vm.synced_folder "/host/dir1", "/guest/dir1"
+    
+
+  end
+  
