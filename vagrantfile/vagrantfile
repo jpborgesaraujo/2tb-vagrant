@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     config.vm.provider "docker" do |d|
       d.name = "servidor-nfs"
       d.image = "phoenixmedia/external-nfs-servidor-provisionador"
-    d.synced_folder "/host/dir1", "/guest/dir1"
+    d.synced_folder "/host/dir1", "/bin/sh"
     end
     
 
@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     config.vm.provider "docker" do |d|
         d.name = "servidor-ftp"
         d.image = "Fauria/vsftpd"
-    d.synced_folder "/host/dir1", "/guest/dir1"
+    d.synced_folder "/host/dir1", "/home/vsftpd"
     end
     
 
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
     config.vm.provider "docker" do |d|
     	d.name = "servidor-apache"
         d.image = "httpd (pd)"
-    d.synced_folder "/host/dir1", "/guest/dir1"
+    d.synced_folder "/host/dir1", "/usr/local/apache2"
     end
     
 
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
     config.vm.provider "docker" do |d|
     	d.name = "servidor-dns"
         d.image = "technitium/dns-server"
-    d.synced_folder "/host/dir1", "/guest/dir1"
+    d.synced_folder "/host/dir1", "/etc/dns"
     end
     
 
@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
     config.vm.provider "docker" do |d|
         d.name = "servidor-dhcp"
         d.image = "networkboot/dhcpd (tabu)"
-    d.synced_folder "/host/dir1", "/guest/dir1"
+    d.synced_folder "/host/dir1", "/data/dhcpd.conf"
     end
     
 
