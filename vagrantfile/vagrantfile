@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.define "vm1" do |vm1|
-      vm1.vm.synced_folder "./diretoriopc","/diretoriovm1"
+      vm1.vm.synced_folder "./diretoriopc","/"
       vm1.vm.network "private_network", ip: "192.168.56.1", gateway: "192.168.56.3"
        vm1.vm.synced_folder ".", "/var/www/html"
 
@@ -14,27 +14,34 @@ Vagrant.configure("2") do |config|
        vm1.vm.network "forwarded_port", guest: 81, host: 8081
        vm1.vm.network "forwarded_port", guest: 82, host: 8082
        vm1.vm.network "forwarded_port", guest: 83, host: 8083
+       vm1.vm.network "forwarded_port", guest: 84, host: 8084
+       vm1.vm.network "forwarded_port", guest: 85, host: 8085
+       vm1.vm.network "forwarded_port", guest: 86, host: 8086
+       vm1.vm.network "forwarded_port", guest: 87, host: 8087
+
        vm1.vm.provision "shell", inline: <<-SHELL
       apt update
       apt install -y docker.io
       
-      docker pull phoenixmedia/external-nfs-servidor-provisionador
-                                                conteiner   /etc/bind/named.conf                      bind9       -p 30053:53
-      docker pull Fauria/vsftpd
-      docker run -d --name Fauria/vsftpd -v diretoriovm1:fauria/vsftpd -p 80:80 httpd
-
       docker pull httpd (pd) #apache
-      docker run -d --name  httpd (pd) -v diretoriovm1:/usr/local/apache2/htdocs/ -p 20:80 -p 21:80 httpd (pd)
+      docker run -d --name  httpd -v :/usr/local/apache2/conf/httpd.conf -p 80:80 httpd
+
+      docker pull miosiris/nfs-ganesha-ceph
+      docker run -d --name miosiris/nfs-ganesha-ceph -v :/etc/krb5.conf -p 81:2049 miosiris/nfs-ganesha-ceph
+
+      docker pull Fauria/vsftpd
+      docker run -d --name Fauria/vsftpd -v :fauria/vsftpd -p 82:20 -p 83:21 Fauria/vsftpd
+
 
       docker pull ubuntu/bind9 #dns
-      docker run -d --name  ubuntu/bind9 -v diretoriovm1:/usr/local/apache2/htdocs/ -p -p 82:53 ubuntu/bind9
+      docker run -d --name ubuntu/bind9 -v :/etc/bind/named.conf -p 84:53 ubuntu/bind9
       
 
       docker pull servidor-dhcp #bota
-      docker run -d --name servidor-dhcp --net host -v diretoriovm1:/usr/local/apache2/htdocs/ -p 81:80 servidor-dhcp
+      docker run -d --name servidor-dhcp --net host -v :/usr/local/apache2/htdocs/ -p 85:80 servidor-dhcp
 
       docker pull itsthenetwork/nfs-server-alpine
-      docker run -d --name itsthenetwork/nfs-server-alpine -v diretoriovm1:/usr/local/apache2/htdocs/ -p 83:2049 httpd
+      docker run -d --name itsthenetwork/nfs-server-alpine -v :/usr/local/apache2/htdocs/ -p 86:2049  itsthenetwork/nfs-server-alpine
 
     SHELL
       
