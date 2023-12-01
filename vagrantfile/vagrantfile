@@ -1,56 +1,42 @@
 Vagrant.configure("2") do |config|
     config.vm.box = "gusztavvargadr/ubuntu-server"
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 1
+    end
 
-    config.vm.define "server1" do |server1|
+    config.vm.define "vm1" do |vm1|
+      vm1.vm.synced_folder "./diretoriopc","/diretoriovm1"
+      vm1.vm.network "private_network", ip: "192.168.56.1", gateway: "192.168.56.3"
+       vm1.vm.synced_folder ".", "/var/www/html"
+
+       vm1.vm.network "forwarded_port", guest: 80, host: 8080
+       vm1.vm.network "forwarded_port", guest: 81, host: 8081
+       vm1.vm.network "forwarded_port", guest: 80, host: 808
+       vm1.vm.provision "shell", inline: <<-SHELL
+      apt update
+      apt install -y docker.io
       
-      server1.vm.network "private_network", ip: "192.168.56.1", gateway: "192.168.56.3"
-       server1.vm.synced_folder ".", "/var/www/html"
-    server1.vm.provision "shell", inline: <<-SHELL
-      apt-get update
+      docker pull phoenixmedia/external-nfs-servidor-provisionador
+                                                conteiner   /etc/bind/named.conf                      bind9       -p 30053:53
+      docker pull Fauria/vsftpd
+      docker run -d --name Fauria/vsftpd -v diretoriovm1:fauria/vsftpd -p 80:80 httpd
+
+      docker pull httpd (pd) #apache
+      docker run -d --name  httpd (pd) -v diretoriovm1:/usr/local/apache2/htdocs/ -p 20:80 -p 21:80 httpd (pd)
+
+      docker pull ubuntu/bind9 #dns
+      docker run -d --name  ubuntu/bind9 -v diretoriovm1:/usr/local/apache2/htdocs/ -p -p 30053:53 ubuntu/bind9
+      
+
+      docker pull servidor-dhcp #bota
+      docker run -d --name servidor-dhcp --net host -v diretoriovm1:/usr/local/apache2/htdocs/ -p 80:80 servidor-dhcp
+
+      docker pull itsthenetwork/nfs-server-alpine
+      docker run -d --name itsthenetwork/nfs-server-alpine -v diretoriovm1:/usr/local/apache2/htdocs/ -p 80:80 httpd
+
     SHELL
       
-      
-    end
-    config.vm.provider "docker" do |d|
-      d.name = "servidor-nfs"
-      d.image = "phoenixmedia/external-nfs-servidor-provisionador"
-    d.synced_folder "/host/dir1", "/bin/sh"
-    end
-    
-
-
-
-    config.vm.provider "docker" do |d|
-        d.name = "servidor-ftp"
-        d.image = "Fauria/vsftpd"
-    d.synced_folder "/host/dir1", "/home/vsftpd"
-    end
-    
-
-
-
-    config.vm.provider "docker" do |d|
-    	d.name = "servidor-apache"
-        d.image = "httpd (pd)"
-    d.synced_folder "/host/dir1", "/usr/local/apache2"
-    end
-    
-
-
-    
-    config.vm.provider "docker" do |d|
-    	d.name = "servidor-dns"
-        d.image = "technitium/dns-server"
-    d.synced_folder "/host/dir1", "/etc/dns"
-    end
-    
-
-    
-    config.vm.provider "docker" do |d|
-        d.name = "servidor-dhcp"
-        d.image = "networkboot/dhcpd (tabu)"
-    d.synced_folder "/host/dir1", "/data/dhcpd.conf"
-    end
     
 
   end
