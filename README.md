@@ -21,6 +21,18 @@ Esse passo se repete para o: DNS, SERVIDOR WEB APACHE, FTP e NFS. passo a passo 
 #Após a criação das VMs, utilize o seguinte comando para se conectar a VM desejada( vagrant ssh vm1 ).
 
 
+Para testar os conteiners foram feito os seguintes testes: 
+
+			http testado com sucesso
+vagrant ssh vm1
+wget -O index.html http://localhost:8080
+
+			nfs testado com sucesso
+vagrant ssh vm2
+df -h
+
+
+
 
 
 
