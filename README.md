@@ -28,8 +28,10 @@ vagrant ssh vm1
 wget -O index.html http://localhost:8080
 
 			nfs testado com sucesso
-vagrant ssh vm2
+vagrant ssh vm1
 df -h
+
+			
 
 
 
