@@ -16,20 +16,11 @@ O primeiro passo e criar uma vm básica depois faz o provisionamento da imagem d
 
 Esse passo se repete para o: DNS, SERVIDOR WEB APACHE, FTP e NFS. passo a passo para utilizar o meu vagrantfile: Clone o repositório “2tb-vagrant” em sua máquina.
 
-bash git clone < https://github.com/jpborgesaraujo/2tb-vagrant.git > cd <2tb-vagrant>
+#bash git clone < https://github.com/jpborgesaraujo/2tb-vagrant.git > cd <2tb-vagrant>
+#Inicie as máquinas virtuais usando o Vagrant. vagrant up
+#Após a criação das VMs, utilize o seguinte comando para se conectar a VM desejada( vagrant ssh vm1 ).
 
-    Inicie as máquinas virtuais usando o Vagrant. vagrant up
 
-    Após a criação das VMs, utilize o seguinte comando para se conectar a VM desejada.
 
-vagrant ssh VM1 vagrant ssh VM2 vagrant ssh VM3
 
-Exemplo de código que importa a imagem:
 
-Vagrant.configure("2") do |config|
-
-config.vm.box = "hashicorp/bionic64"
-
-config.vm.provision "docker", images: ["ubuntu"]
-
-end
