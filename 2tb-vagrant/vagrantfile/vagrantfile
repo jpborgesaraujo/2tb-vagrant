@@ -1,0 +1,63 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "gusztavvargadr/ubuntu-server"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 1
+  end
+
+  config.vm.define "vm1" do |vm1|
+    vm1.vm.synced_folder ".", "/vagrant", type: "virtualbox"
+    vm1.vm.network "private_network", ip: "192.168.56.1", gateway: "192.168.56.3"
+    config.vm.network "public_network", type: "dhcp", bridge: "wlp3s0"
+
+    vm1.vm.network "forwarded_port", guest: 53, host: 30053
+    vm1.vm.network "forwarded_port", guest: 80, host: 8080
+    vm1.vm.network "forwarded_port", guest: 20, host: 20
+    vm1.vm.network "forwarded_port", guest: 21, host: 21
+    vm1.vm.network "forwarded_port", guest: 21100, host: 21100
+    vm1.vm.network "forwarded_port", guest: 85, host: 85
+
+    vm1.vm.provision "shell", inline: <<-SHELL
+      sudo apt update
+      sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      sudo apt update
+      sudo sysctl -w net.ipv4.ip_forward=1
+      sudo iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+      sudo apt install -y docker-ce
+      sudo systemctl status docker
+      sudo docker --version
+      sudo usermod -aG docker ${USER}
+      sudo su
+
+      sudo docker pull networkboot/dhcpd
+      sudo docker pull ubuntu/bind9
+      sudo docker pull httpd:2.4
+      sudo docker pull fauria/vsftpd
+      sudo docker pull itsthenetwork/nfs-server-alpine
+
+      sudo docker run -d --name dhcpd -v /vagrant/data:/data -p 67:67/udp networkboot/dhcpd
+
+      sudo docker run -d --name server-dns -v /vagrant/dns:/etc/bind/ -p 30054:53 ubuntu/bind9:latest
+
+      sudo docker run -d --name server-apache -v /vagrant/vagrant/http:/usr/local/apache2/htdocs/ -p 8080:80 httpd:2.4
+
+      sudo docker run -d --name server-ftp -v /vagrant/ftp:/home/vsftpd -p 20:20 -p 21:21 -p 21100-21110:21100-21110 -e FTP_USER=admin -e FTP_PASS=admin -e PASV_ADDRESS=127.0.0.1 -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110 fauria/vsftpd
+
+    sudo docker run -d --name server-nfs --privileged -v /vagrant/nfs:/nfsshare --net=host -e SYNC=true -e SHARED_DIRECTORY=/nfsshare -e NFS_VERSION=3 -e NFS_UDP=false itsthenetwork/nfs-server-alpine:latest
+ sudo apt update
+    SHELL
+  end
+  config.vm.define "vm2" do |vm2|
+  config.vm.network "private_network", ip: "192.168.56.2", gateway: "192.168.56.3"
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt update
+  SHELL
+end
+
+
+
+
+end
+
